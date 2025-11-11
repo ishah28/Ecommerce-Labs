@@ -1,0 +1,63 @@
+INSERT INTO students (name, age, major) VALUES
+('Alice ', 20, 'EECS'),
+('Brian Lee', 22, 'MATH'),
+('Catherine Smith', 21, 'PSYC'),
+('Daniel Kim', 19, 'MATH'),
+('Eva Patel', 23, 'ADMS'),
+('Frank Nguyen', 20, 'PHYS'),
+('Grace O’Malley', 24, 'VISA'),
+('Hassan Ali', 22, 'ECON'),
+('Isabella Rivera', 21, 'EECS'),
+('Jake Thompson', 20, 'EECS');
+
+UPDATE students
+    SET id = 3
+    WHERE name = 'Jake Thompson';
+
+DELETE FROM students WHERE id = 3;
+
+
+I’ll assume your base URL is:
+http://localhost:8080/studentapp/api/students
+If your context path is different (for example /StudentInformationSystem), just replace it accordingly.
+
+1️⃣ Get all students
+curl -X GET http://localhost:8080/studentapp/api/students
+
+2️⃣ Get a specific student by ID
+curl -X GET http://localhost:8080/studentapp/api/students/1
+
+3️⃣ Add a new student (POST)
+curl -X POST http://localhost:8080/studentapp/api/students \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "Luna Park",
+           "age": 22,
+           "major": "Electrical Engineering"
+         }'
+
+4️⃣ Update an existing student (PUT)
+For example, update student with ID 3:
+
+curl -X PUT http://localhost:8080/studentapp/api/students/3 \
+     -H "Content-Type: application/json" \
+     -d '{
+           "name": "Catherine Smith",
+           "age": 22,
+           "major": "Cognitive Science"
+         }'
+
+5️⃣ Delete a student by ID
+curl -X DELETE http://localhost:8080/studentapp/api/students/4
+
+6️⃣ Example: filter or search (if supported)
+If your API supports query params (optional feature):
+
+curl -X GET "http://localhost:8080/studentapp/api/students?major=Computer%20Science"
+
+7️⃣ Check response headers (debugging)
+curl -i -X GET http://localhost:8080/studentapp/api/students
+
+8️⃣ Pretty print JSON output (macOS/Linux)
+If you have jq installed, you can pretty print the responses:
+curl -s http://localhost:8080/studentapp/api/students | jq
