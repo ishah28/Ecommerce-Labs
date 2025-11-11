@@ -118,3 +118,18 @@ public class StudentResource {
         return Response.status(Response.Status.NOT_FOUND).entity("Student not found").build();
     }
 }
+
+/*✅ JSON body (standard REST)
+curl -X PUT http://localhost:8080/studentapp/api/students/3 \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Alice", "age": 23, "major": "Data Science"}'
+
+✅ Simple query version (no JSON)
+curl -X PUT "http://localhost:8080/studentapp/api/students?id=3&name=Alice&age=23&major=Data%20Science"
+
+✅ Delete by path
+curl -X DELETE http://localhost:8080/studentapp/api/students/3
+
+✅ Delete by query
+curl -X DELETE "http://localhost:8080/studentapp/api/students?id=3"
+*/
