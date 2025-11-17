@@ -82,7 +82,7 @@ $(document).ready(function() {
 
     // Load user info
     $.ajax({
-        url: "http://localhost:8080/studentapp/api/users/" + userId,
+        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/users/" + userId,
         type: "GET",
         success: function(user){
             $("#billingName").val(user.fullName);
@@ -96,7 +96,7 @@ $(document).ready(function() {
 
     // Load auction info
     $.ajax({
-        url: "http://localhost:8080/studentapp/api/auctions/" + auctionId,
+        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/auctions/" + auctionId,
         type: "GET",
         success: function(auction){
 
@@ -136,7 +136,7 @@ $("#paymentForm").submit(function(e){
     };
 
     $.ajax({
-        url: "http://localhost:8080/studentapp/api/payments",
+        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/payments",
         type: "POST",
         contentType: "application/json",
         data: JSON.stringify(paymentData),
