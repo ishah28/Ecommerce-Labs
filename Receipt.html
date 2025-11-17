@@ -35,7 +35,7 @@ const paymentId = params.get("paymentId");
 $(document).ready(function() {
 
     $.ajax({
-        url: "http://localhost:8080/studentapp/api/payments/" + paymentId,
+        url: "http://localhost:8080/EECS4413-E-Commerce-System/api/payments/" + paymentId,
         type: "GET",
         success: function(payment){
 
@@ -48,7 +48,7 @@ $(document).ready(function() {
 
             // Now fetch auction shipping time
             $.ajax({
-                url: "http://localhost:8080/studentapp/api/auctions/" + payment.auctionId,
+                url: "http://localhost:8080/EECS4413-E-Commerce-System/api/auctions/" + payment.auctionId,
                 type: "GET",
                 success: function(auction){
 
