@@ -1,9 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<header>
+    <h1>Payment Receipt</h1>
+</header>
+
+<div class="container">
+
+    <h2>Receipt Details</h2>
+    <p id="receiptInfo"></p>
+
+    <h2>Shipping Details</h2>
+    <p id="shippingInfo"></p>
+
+</div>
+
+<footer>
+    <p>© 2025 eCommerce Auction Platform</p>
+</footer>
+
 <script>
 const params = new URLSearchParams(window.location.search);
 const paymentId = params.get("paymentId");
 
-// Load payment + auction details
-$(document).ready(function(){
+// Load payment and shipping info
+$(document).ready(function() {
+
     $.ajax({
         url: "http://localhost:8080/studentapp/api/payments/" + paymentId,
         type: "GET",
@@ -12,26 +42,30 @@ $(document).ready(function(){
             $("#receiptInfo").html(
                 "Payment ID: " + payment.paymentId + "<br>" +
                 "Amount Paid: $" + payment.amount + "<br>" +
-                "Status: " + payment.status + "<br>"
+                "Status: " + payment.status + "<br>" +
+                "Payment Time: " + payment.paymentTime + "<br>"
             );
 
-            // Now load the auction to get shipping time
+            // Now fetch auction shipping time
             $.ajax({
                 url: "http://localhost:8080/studentapp/api/auctions/" + payment.auctionId,
                 type: "GET",
                 success: function(auction){
 
                     $("#shippingInfo").html(
-                        "<b>Shipping To:</b><br>" +
+                        "<strong>Shipping Address:</strong><br>" +
+                        payment.billingName + "<br>" +
                         payment.billingAddress + "<br>" +
                         payment.city + ", " + payment.state + " " + payment.postalCode + "<br>" +
                         payment.country + "<br><br>" +
-                        "<b>Item will be shipped in " + auction.shippingTime + " days.</b>"
+                        "<strong>Item will be shipped in " + auction.shippingTime + " days.</strong>"
                     );
                 }
             });
-
         }
     });
 });
 </script>
+
+</body>
+</html>
