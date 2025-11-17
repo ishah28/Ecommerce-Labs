@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<header>
+    <h1>Payment Page</h1>
+</header>
+
+<div class="container">
+    <!-- User Address Section -->
+    <h3>Shipping Address</h3>
+    <p id="userAddress"></p>
+
+    <!-- Item + Price -->
+    <h3>Order Summary</h3>
+    <p id="orderSummary"></p>
+
+    <!-- Payment Form -->
+    <form id="paymentForm">
+        <label>Credit Card Number:</label>
+        <input type="text" id="cardNumber" required><br>
+
+        <label>Name on Card:</label>
+        <input type="text" id="cardName" required><br>
+
+        <label>Expiration Date:</label>
+        <input type="text" id="expiration" placeholder="MM/YY" required><br>
+
+        <label>Security Code (CVV):</label>
+        <input type="text" id="cvv" required><br>
+
+        <button type="submit">Submit Payment</button>
+    </form>
+
+    <p id="paymentMessage"></p>
+</div>
+
+<script>
+// Assume URL params: pay.html?userId=3&itemId=15
+const urlParams = new URLSearchParams(window.location.search);
+const userId = urlParams.get("userId");
+const itemId = urlParams.get("itemId");
+
+// Load User Address + Item Price
+$(document).ready(function() {
+
+    // 1. Load User Address
+    $.ajax({
+        url: "http://localhost:8080/studentapp/api/users/" + userId,
+        type: "GET",
+        success: function(user){
+            $("#userAddress").text(
+                user.address + ", " + user.city + ", " + user.postalCode
+            );
+        }
+    });
+
+    // 2. Load Item Price + Shipping
+    $.ajax({
+        url: "http://localhost:8080/studentapp/api/items/" + itemId,
+        type: "GET",
+        success: function(item){
+            const total = item.price + item.shippingCost;
+
+            $("#orderSummary").text(
+                "Item: " + item.title +
+                " | Price: $" + item.price +
+                " | Shipping: $" + item.shippingCost +
+                " | Total: $" + total
+            );
+        }
+    });
+
+});
+
+// Submit Payment
+$("#paymentForm").submit(function(e){
+    e.preventDefault();
+
+    const paymentData = {
+        userId: userId,
+        itemId: itemId,
+        cardNumber: $("#cardNumber").val(),
+        cardName: $("#cardName").val(),
+        expiration: $("#expiration").val(),
+        cvv: $("#cvv").val()
+    };
+
+    $.ajax({
+        url: "http://localhost:8080/studentapp/api/payments",
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(paymentData),
+        success: function(result){
+            // Redirect to receipt page
+            window.location.href = "Receipt.html?paymentId=" + result.paymentId;
+        },
+        error: function(error){
+            console.log(error);
+            $("#paymentMessage").text("Payment failed. Try again.");
+        }
+    });
+});
+</script>
+</body>
+</html>
