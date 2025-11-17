@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Receipt & Shipping</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+
+<body>
+<header>
+    <h1>Payment Receipt</h1>
+</header>
+
+<div class="container">
+    <h3>Order Receipt</h3>
+    <p id="receiptDetails"></p>
+
+    <h3>Shipping Information</h3>
+    <p id="shippingInfo"></p>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const paymentId = urlParams.get("paymentId");
+
+// Load Receipt + Shipping Details
+$(document).ready(function(){
+
+    $.ajax({
+        url: "http://localhost:8080/studentapp/api/payments/" + paymentId,
+        type: "GET",
+        success: function(payment){
+
+            const total = payment.price + payment.shippingCost;
+
+            $("#receiptDetails").html(
+                "Item: " + payment.itemName + "<br>" +
+                "Price Paid: $" + payment.price + "<br>" +
+                "Shipping Cost: $" + payment.shippingCost + "<br>" +
+                "TOTAL: $" + total
+            );
+
+            $("#shippingInfo").html(
+                "Address: " + payment.address + "<br>" +
+                "The item will be shipped in " + payment.shippingTime + " days."
+            );
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
